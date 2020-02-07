@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://code.angularjs.org/1.5.8/angular.min.js"></script>
+</head>
+<body ng-app="App" ng-controller="main">
+	<textarea type="text" rows="10" cols="100" ng-model="input" ng-change="message = ''"></textarea>
+	<button type="button" class="button" ng-click="validate()">Validate</button>
+	{{message}}
+</body>
+<script>
+angular
+  .module('App', [])
+  .controller('main',['$location','$scope', '$http', '$timeout', function($location, $scope, $http, $timeout){
+	  $scope.server = location.origin + '/';
+	  $scope.input;
+	  $scope.message;
+	  
+	  $scope.validate = function() {
+	  	if(matchingBrackets($scope.input))
+		  $scope.message = 'valid';
+		else
+		  $scope.message = 'invalid';
+	  }
+  }]);
+  
+  let matchingBrackets = function (str) {
+    let stack = [];
+    let map = {
+        '(': ')',
+        '[': ']',
+        '{': '}'
+    }
+
+    for (let i = 0; i < str.length; i++) {
+    	//only take brackets
+    	if (str[i] === '(' || str[i] === '{' || str[i] === '[' || str[i] === ')' || str[i] === '}' || str[i] === ']'){
+	        if (str[i] === '(' || str[i] === '{' || str[i] === '[' ) {
+	            stack.push(str[i]);
+	        }
+	        else {
+	            let last = stack.pop();
+	            if (str[i] !== map[last]) {return false};
+	        }
+        }
+    }
+        if (stack.length !== 0) {return false};
+    return true;
+}
+</script>
+</html>
